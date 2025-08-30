@@ -1,3 +1,4 @@
+require "user.dracula"
 require "user.options"
 require "user.keymaps"
 require "user.plugins"
