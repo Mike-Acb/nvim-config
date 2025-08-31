@@ -3,12 +3,24 @@ if not status_ok then
   return
 end
 
-local config_status_ok, nvim_tree_config = pcall(require, "nvim-tree.config")
-if not config_status_ok then
-  return
-end
+-- 禁用 netrw
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 
-local tree_cb = nvim_tree_config.nvim_tree_callback
+-- 设置 termguicolors
+vim.opt.termguicolors = true
+
+-- 确保图标字体正确加载
+if vim.fn.has('nvim-0.8') == 1 then
+  -- 新版本 nvim-tree 不需要手动定义诊断 sign
+  -- 它们会自动处理
+else
+  -- 为旧版本定义 sign
+  vim.fn.sign_define('NvimTreeDiagnosticErrorIcon', { text = '', texthl = 'DiagnosticSignError' })
+  vim.fn.sign_define('NvimTreeDiagnosticWarnIcon',  { text = '', texthl = 'DiagnosticSignWarn'  })
+  vim.fn.sign_define('NvimTreeDiagnosticInfoIcon',  { text = '', texthl = 'DiagnosticSignInfo'  })
+  vim.fn.sign_define('NvimTreeDiagnosticHintIcon',  { text = '', texthl = 'DiagnosticSignHint'  })
+end
 
 nvim_tree.setup {
   update_focused_file = {
@@ -16,52 +28,56 @@ nvim_tree.setup {
     update_cwd = true,
   },
   renderer = {
-    root_folder_modifier = ":t",
+    root_folder_label = false,
     icons = {
-      glyphs = {
-        default = "",
-        symlink = "",
-        folder = {
-          arrow_open = "",
-          arrow_closed = "",
-          default = "",
-          open = "",
-          empty = "",
-          empty_open = "",
-          symlink = "",
-          symlink_open = "",
-        },
-        git = {
-          unstaged = "",
-          staged = "S",
-          unmerged = "",
-          renamed = "➜",
-          untracked = "U",
-          deleted = "",
-          ignored = "◌",
-        },
+      webdev_colors = true,
+      git_placement = "before",
+      padding = " ",
+      symlink_arrow = " ➛ ",
+      show = {
+        file = true,
+        folder = true,
+        folder_arrow = true,
+        git = true,
       },
+      -- 使用 nvim-web-devicons 的默认图标
+      -- glyphs 配置已移除，让插件自动处理图标
     },
   },
   diagnostics = {
-    enable = true,
+    enable = false,
     show_on_dirs = true,
+    debounce_delay = 50,
+    severity = {
+      min = vim.diagnostic.severity.HINT,
+      max = vim.diagnostic.severity.ERROR,
+    },
     icons = {
-      hint = "",
-      info = "",
-      warning = "",
-      error = "",
+      hint = "",
+      info = "",
+      warning = "",
+      error = "",
     },
   },
   view = {
     width = 30,
     side = "left",
-    mappings = {
-      list = {
-        { key = { "l", "<CR>", "o" }, cb = tree_cb "edit" },
-        { key = "h", cb = tree_cb "close_node" },
-        { key = "v", cb = tree_cb "vsplit" },
-      },
-    },
   },
+  on_attach = function(bufnr)
+    local api = require("nvim-tree.api")
+    
+    local function opts(desc)
+      return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+    end
+    
+    -- 默认映射
+    api.config.mappings.default_on_attach(bufnr)
+    
+    -- 自定义映射
+    vim.keymap.set('n', 'l', api.node.open.edit, opts('Open'))
+    vim.keymap.set('n', '<CR>', api.node.open.edit, opts('Open'))
+    vim.keymap.set('n', 'o', api.node.open.edit, opts('Open'))
+    vim.keymap.set('n', 'h', api.node.navigate.parent_close, opts('Close Directory'))
+    vim.keymap.set('n', 'v', api.node.open.vertical, opts('Open: Vertical Split'))
+  end,
 }

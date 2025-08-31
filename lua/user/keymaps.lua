@@ -34,7 +34,10 @@ keymap("n", "<A-Right>", ":vertical resize +2<CR>", opts)
 -- Navigate buffers
 keymap("n", "<S-l>", ":bnext<CR>", opts)
 keymap("n", "<S-h>", ":bprevious<CR>", opts)
-keymap("n", "<S-d>", ":bd | bnext<CR>", opts)
+-- 关闭当前缓冲区但保持窗口布局
+keymap("n", "<S-d>", ":Bdelete<CR>", opts)
+-- 强制关闭当前缓冲区
+keymap("n", "<S-D>", ":Bdelete!<CR>", opts)
 
 -- Move text up and down
 keymap("n", "<A-j>", "<Esc>:m .+1<CR>==gi", opts)

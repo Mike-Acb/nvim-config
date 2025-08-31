@@ -1,5 +1,5 @@
 local servers = {
-	"sumneko_lua",
+	"lua_ls",  -- Updated from sumneko_lua
 	-- "cssls",
 	-- "html",
 	-- "tsserver",
@@ -27,6 +27,20 @@ require("mason-lspconfig").setup({
 	ensure_installed = servers,
 	automatic_installation = true,
 })
+
+-- Setup mason-null-ls with more conservative tool list
+local mason_null_ls_status_ok, mason_null_ls = pcall(require, "mason-null-ls")
+if mason_null_ls_status_ok then
+  mason_null_ls.setup({
+    ensure_installed = {
+      "prettier",
+      "black",
+      "stylua",
+      -- Only add tools that are commonly available
+    },
+    automatic_installation = true,
+  })
+end
 
 local lspconfig_status_ok, lspconfig = pcall(require, "lspconfig")
 if not lspconfig_status_ok then
