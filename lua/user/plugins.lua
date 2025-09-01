@@ -108,6 +108,26 @@ return packer.startup(function(use)
   -- draucula 🧛
   use { 'Mofiqul/dracula.nvim'}
 
+    -- avante start
+    -- Required plugins (avoiding duplicates)
+    use 'MunifTanjim/nui.nvim'
+    use 'MeanderingProgrammer/render-markdown.nvim'
+
+    -- Optional dependencies (avoiding duplicates)
+    use 'HakonHarnes/img-clip.nvim'
+    use 'zbirenbaum/copilot.lua'
+    use 'stevearc/dressing.nvim' -- for enhanced input UI
+    use 'folke/snacks.nvim' -- for modern input UI
+    use {
+      'yetone/avante.nvim',
+      branch = 'main',
+      run = 'make',
+      config = function()
+        require('avante').setup()
+      end
+    }
+    -- avante end
+
   -- java (temporarily disabled due to E5248 error)
   -- use { 'mfussenegger/nvim-jdtls' }
 

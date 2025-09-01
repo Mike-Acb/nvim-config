@@ -15,35 +15,34 @@ local check_backspace = function()
   return col == 0 or vim.fn.getline("."):sub(col, col):match "%s"
 end
 
---   פּ ﯟ   some other good icons
+-- 使用简单的字母图标，避免字体问题
 local kind_icons = {
-  Text = "",
-  Method = "m",
-  Function = "",
-  Constructor = "",
-  Field = "",
-  Variable = "",
-  Class = "",
-  Interface = "",
-  Module = "",
-  Property = "",
-  Unit = "",
-  Value = "",
-  Enum = "",
-  Keyword = "",
-  Snippet = "",
-  Color = "",
-  File = "",
-  Reference = "",
-  Folder = "",
-  EnumMember = "",
-  Constant = "",
-  Struct = "",
-  Event = "",
-  Operator = "",
-  TypeParameter = "",
+  Text = "T",
+  Method = "M",
+  Function = "F",
+  Constructor = "C",
+  Field = "f",
+  Variable = "V",
+  Class = "C",
+  Interface = "I",
+  Module = "M",
+  Property = "P",
+  Unit = "U",
+  Value = "v",
+  Enum = "E",
+  Keyword = "K",
+  Snippet = "S",
+  Color = "c",
+  File = "F",
+  Reference = "R",
+  Folder = "D",
+  EnumMember = "e",
+  Constant = "C",
+  Struct = "S",
+  Event = "E",
+  Operator = "O",
+  TypeParameter = "T",
 }
--- find more here: https://www.nerdfonts.com/cheat-sheet
 
 cmp.setup {
   snippet = {
